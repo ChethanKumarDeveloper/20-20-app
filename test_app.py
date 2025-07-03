@@ -10,6 +10,8 @@ Use this to make sure everything works before using the real app.
 import time           # For timers and delays
 import threading      # For running multiple things at once
 from plyer import notification  # For showing desktop notifications
+import os
+from pathlib import Path
 
 # ============================================================================
 # TEST SETTINGS - Much faster for testing!
@@ -17,13 +19,20 @@ from plyer import notification  # For showing desktop notifications
 
 WORK_TIME = 30         # 30 seconds (instead of 20 minutes)
 REST_TIME = 5          # 5 seconds for notification (instead of 20)
-NOTIFICATION_TITLE = "🧪 TEST: Time to Rest Your Eyes!"
-NOTIFICATION_MESSAGE = """This is a TEST notification!
 
-In the real app, this appears every 20 minutes.
-This test runs every 30 seconds.
+# Optional icon
+ICON_PATH = str(Path(__file__).with_name("eye_icon.png"))
 
-Look around for 5 seconds! 👁️"""
+# Improved title/message
+NOTIFICATION_TITLE = "🧪  TEST: Eye Break Reminder!"
+
+NOTIFICATION_MESSAGE = (
+    "(TEST MODE) 20-20-20 Rule\n\n"
+    "•  Look at something 20 feet away\n"
+    "•  Blink slowly 5 times\n"
+    "•  Rest your eyes briefly\n\n"
+    "This runs every 30 seconds for testing."
+)
 
 # ============================================================================
 # FUNCTIONS - Same as the real app, just faster
@@ -36,7 +45,8 @@ def show_notification():
             title=NOTIFICATION_TITLE,
             message=NOTIFICATION_MESSAGE,
             timeout=REST_TIME,
-            app_name="Eye Care Test"
+            app_name="Eye Care Test",
+            app_icon=ICON_PATH if os.path.exists(ICON_PATH) else None
         )
         print("✅ TEST notification sent!")
     except Exception as error:

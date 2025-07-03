@@ -12,6 +12,8 @@ Simple and effective eye care for computer users!
 import time           # For timers and delays
 import threading      # For running multiple things at once
 from plyer import notification  # For showing desktop notifications
+import os
+from pathlib import Path
 
 # ============================================================================
 # SETTINGS - You can change these numbers!
@@ -19,12 +21,21 @@ from plyer import notification  # For showing desktop notifications
 
 WORK_TIME = 20 * 60    # 20 minutes in seconds (20 × 60 = 1200 seconds)
 REST_TIME = 20         # 20 seconds for the notification to stay
-NOTIFICATION_TITLE = "👁️ Time to Rest Your Eyes!"
-NOTIFICATION_MESSAGE = """🏃‍♂️ 20-20-20 Rule Reminder!
 
-Look at something 20 feet away for 20 seconds.
+# Optional icon (PNG). If the file doesn't exist we fall back to no icon.
+ICON_PATH = str(Path(__file__).with_name("eye_icon.png"))
 
-Your eyes will thank you! 😊"""
+# Prettier title & message
+NOTIFICATION_TITLE = "👁️  Time for an Eye Break!"
+
+# Multiline message with bullet points for better readability
+NOTIFICATION_MESSAGE = (
+    "🕒  20-20-20 Rule\n\n"
+    "•  Look at something 20 feet away\n"
+    "•  Blink slowly 20 times\n"
+    "•  Rest your eyes for 20 seconds\n\n"
+    "Your eyes will thank you! 😊"
+)
 
 # ============================================================================
 # FUNCTIONS - The building blocks of our app
@@ -37,10 +48,11 @@ def show_notification():
     """
     try:
         notification.notify(
-            title=NOTIFICATION_TITLE,           # The big text at the top
-            message=NOTIFICATION_MESSAGE,       # The message body
-            timeout=REST_TIME,                  # How long it stays (20 seconds)
-            app_name="Eye Care App"             # The app name
+            title=NOTIFICATION_TITLE,            # Big bold title
+            message=NOTIFICATION_MESSAGE,        # Pretty message body
+            timeout=REST_TIME,                   # Show for REST_TIME seconds
+            app_name="Eye Care App",            # Name shown in popup
+            app_icon=ICON_PATH if os.path.exists(ICON_PATH) else None  # Optional icon
         )
         print("✅ Notification sent! Time to rest your eyes.")
     except Exception as error:
